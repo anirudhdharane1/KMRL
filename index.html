@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMRL AI Dashboard - SIH 2025 Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .mockup-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .prototype-badge {
+            position: absolute;
+            top: -10px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            letter-spacing: 0.5px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #f0f2f5;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        .metrics-section {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .metric-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-title {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .stations-panel {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .station-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+        
+        .station-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .station-card.water-metro {
+            border-left-color: #1abc9c;
+        }
+        
+        .station-card.festival {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fff5f5, #ffffff);
+        }
+        
+        .station-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .station-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .station-icon {
+            font-size: 1.5rem;
+        }
+        
+        .passenger-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #3498db;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .load-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .load-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+        
+        .load-normal { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .load-medium { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .load-high { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        
+        .load-status {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        
+        .festival-tag {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        .alerts-panel {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .alert-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s ease;
+        }
+        
+        .alert-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .alert-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .alert-critical { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .alert-warning { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .alert-success { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        
+        .alert-content h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .alert-time {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tech-footer {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .tech-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1200px) {
+            .metrics-section { grid-template-columns: repeat(3, 1fr); }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .stations-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mockup-container">
+        <div class="prototype-badge">SIH 2025 PROTOTYPE</div>
+        
+        <div class="header">
+            <h1>🚇 KMRL AI Train Scheduling System</h1>
+            <div class="subtitle">Real-time Passenger Demand Forecasting & Adaptive Induction</div>
+            <div class="live-indicator">
+                <div class="pulse-dot"></div>
+                LIVE AI SYSTEM ACTIVE
+            </div>
+        </div>
+        
+        <div class="metrics-section">
+            <div class="metric-box">
+                <div class="metric-title">Active Trains</div>
+                <div class="metric-value">28</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-title">Live Passengers</div>
+                <div class="metric-value">4,247</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-title">Energy Saved</div>
+                <div class="metric-value">31%</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-title">Avg Wait Time</div>
+                <div class="metric-value">2.1min</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-title">AI Accuracy</div>
+                <div class="metric-value">94.2%</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="stations-panel">
+                <div class="panel-title">
+                    🗺️ Real-time Station Monitoring
+                    <span style="font-size: 0.9rem; color: #7f8c8d; font-weight: 500;">Unified Metro + Water Metro</span>
+                </div>
+                
+                <div class="stations-grid">
+                    <div class="station-card">
+                        <div class="station-header">
+                            <div class="station-name">Aluva Terminal</div>
+                            <div class="station-icon">🚇</div>
+                        </div>
+                        <div class="passenger-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">187</span>
+                                <small class="stat-label">Current</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">245</span>
+                                <small class="stat-label">Predicted</small>
+                            </div>
+                        </div>
+                        <div class="load-bar">
+                            <div class="load-fill load-medium" style="width: 68%"></div>
+                        </div>
+                        <div class="load-status">Medium Load - Normal Operations</div>
+                    </div>
+                    
+                    <div class="station-card festival">
+                        <div class="station-header">
+                            <div class="station-name">MG Road</div>
+                            <div class="station-icon">🚇</div>
+                        </div>
+                        <div class="passenger-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">342</span>
+                                <small class="stat-label">Current</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">487</span>
+                                <small class="stat-label">Predicted</small>
+                            </div>
+                        </div>
+                        <div class="load-bar">
+                            <div class="load-fill load-high" style="width: 89%"></div>
+                        </div>
+                        <div class="load-status">
+                            <span class="festival-tag">🎉 ONAM FESTIVAL</span>
+                            High Load Detected
+                        </div>
+                    </div>
+                    
+                    <div class="station-card">
+                        <div class="station-header">
+                            <div class="station-name">Kochi Airport</div>
+                            <div class="station-icon">🚇</div>
+                        </div>
+                        <div class="passenger-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">94</span>
+                                <small class="stat-label">Current</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">78</span>
+                                <small class="stat-label">Predicted</small>
+                            </div>
+                        </div>
+                        <div class="load-bar">
+                            <div class="load-fill load-normal" style="width: 32%"></div>
+                        </div>
+                        <div class="load-status">Low Load - Energy Save Mode</div>
+                    </div>
+                    
+                    <div class="station-card water-metro">
+                        <div class="station-header">
+                            <div class="station-name">Vytilla Water Metro</div>
+                            <div class="station-icon">🚢</div>
+                        </div>
+                        <div class="passenger-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">123</span>
+                                <small class="stat-label">Current</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">156</span>
+                                <small class="stat-label">Predicted</small>
+                            </div>
+                        </div>
+                        <div class="load-bar">
+                            <div class="load-fill load-medium" style="width: 58%"></div>
+                        </div>
+                        <div class="load-status">🔄 Unified Scheduling Active</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alerts-panel">
+                <div class="panel-title">🚨 AI Recommendations</div>
+                
+                <div class="alert-item">
+                    <div class="alert-icon alert-critical">!</div>
+                    <div class="alert-content">
+                        <h4>URGENT: Extra Train Needed</h4>
+                        <p>MG Road - Onam crowd surge +42%</p>
+                        <div class="alert-time">2 minutes ago</div>
+                        <button class="action-btn">Deploy Train #29</button>
+                    </div>
+                </div>
+                
+                <div class="alert-item">
+                    <div class="alert-icon alert-warning">⚡</div>
+                    <div class="alert-content">
+                        <h4>Energy Optimization</h4>
+                        <p>Skip Airport train - Only 12 passengers</p>
+                        <div class="alert-time">4 minutes ago</div>
+                        <button class="action-btn">Approve Skip</button>
+                    </div>
+                </div>
+                
+                <div class="alert-item">
+                    <div class="alert-icon alert-success">✓</div>
+                    <div class="alert-content">
+                        <h4>Water Metro Sync Success</h4>
+                        <p>Vytilla transfer timing optimized</p>
+                        <div class="alert-time">6 minutes ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tech-footer">
+            <h3>🤖 AI-Powered Smart Transportation System</h3>
+            <div class="tech-stack">
+                <div class="tech-item">N-BEATS Forecasting</div>
+                <div class="tech-item">Temporal Fusion Transformer</div>
+                <div class="tech-item">Real-time Kafka Streaming</div>
+                <div class="tech-item">Weather API Integration</div>
+                <div class="tech-item">Event Calendar Analysis</div>
+                <div class="tech-item">Anomaly Detection</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
